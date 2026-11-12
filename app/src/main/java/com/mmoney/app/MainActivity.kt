@@ -1,9 +1,10 @@
-        
+   
 package com.mmoney.app
 
 import android.app.Activity
 import android.os.Bundle
 import android.graphics.Color
+import android.view.Gravity
 import android.widget.*
 
 class MainActivity : Activity() {
@@ -18,82 +19,95 @@ class MainActivity : Activity() {
 
         val page = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(18, 26, 18, 26)
+            setPadding(20, 30, 20, 25)
             setBackgroundColor(bg)
         }
 
-        val scroll = ScrollView(this).apply {
-            addView(page)
+        val scroll = ScrollView(this)
+        scroll.addView(page)
+
+        page.addView(label("MMONEY AI", 32, mint, true))
+        page.addView(label("YOUR AI NIFTY TRADING ASSISTANT", 12, muted, true))
+        page.addView(gap(25))
+
+        val signal = card()
+        signal.addView(label("AI TRADE SIGNAL", 14, mint, true))
+        signal.addView(label("NO TRADE", 30, Color.WHITE, true))
+        signal.addView(label(
+            "Waiting for verified live market data...",
+            13, muted, false
+        ))
+        page.addView(signal)
+        page.addView(gap(15))
+
+        val plan = card()
+        plan.addView(label("TRADE ANALYSIS", 14, mint, true))
+        plan.addView(label(
+            "Market: NIFTY 50 OPTIONS\n\n" +
+            "Direction: —\n" +
+            "Strike Price: —\n" +
+            "Entry Price: —\n" +
+            "Stop Loss: —\n" +
+            "Target Price: —",
+            17, Color.WHITE, true
+        ))
+        page.addView(plan)
+        page.addView(gap(15))
+
+        val approval = card()
+        approval.addView(label("YOUR APPROVAL", 14, mint, true))
+        approval.addView(label(
+            "AI signal milne ke baad order tumhari permission se hi jayega.",
+            13, muted, false
+        ))
+
+        val yes = Button(this).apply {
+            text = "YES - PLACE ORDER"
+            isEnabled = false
+            setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Groww API not connected",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
-        page.addView(text("MMONEY AI", 30, mint, true))
-        page.addView(text("AI TRADE ANALYSIS • OPTIONS", 13, muted, true))
-        page.addView(space(18))
+        val no = Button(this).apply {
+            text = "NO - SKIP TRADE"
+            isEnabled = false
+        }
 
-        page.addView(card(
-            "MARKET WATCH",
-            "NIFTY 50  •  BANK NIFTY  •  SENSEX",
-            "Live index prices: NOT CONNECTED"
+        approval.addView(yes)
+        approval.addView(no)
+        page.addView(approval)
+        page.addView(gap(15))
+
+        val broker = card()
+        broker.addView(label("GROWW BROKER", 14, mint, true))
+        broker.addView(label("NOT CONNECTED", 20, Color.WHITE, true))
+        broker.addView(label(
+            "Official Groww API connection required for live orders.",
+            12, muted, false
         ))
-        page.addView(space(12))
+        page.addView(broker)
 
-        page.addView(card(
-            "AI TRADE SIGNAL",
-            "NO TRADE",
-            "Verified live price and option-chain data required before CALL or PUT analysis."
-        ))
-        page.addView(space(12))
-
-        page.addView(card(
-            "TRADE PLAN",
-            "Direction: —\n" +
-            "Suggested strike: —\n" +
-            "Entry premium: —\n" +
-            "Stop-loss: —\n" +
-            "Target 1: —\n" +
-            "Target 2: —\n" +
-            "Target 3: —",
-            "Levels will appear only after a validated market setup."
-        ))
-        page.addView(space(12))
-
-        page.addView(card(
-            "MARKET CONFIRMATION",
-            "Price action: Waiting for data\n" +
-            "Option-chain OI: Waiting for data\n" +
-            "Volume: Waiting for data\n" +
-            "Volatility: Waiting for data\n" +
-            "Trend: Waiting for data",
-            "Analysis combines price action, technical indicators, OI, volume and volatility."
-        ))
-        page.addView(space(12))
-
-        page.addView(card(
-            "SETUP QUALITY",
-            "Not available",
-            "No confidence score without verified current market data. Signals are not guaranteed."
-        ))
-        page.addView(space(12))
-
-        page.addView(card(
-            "GROWW CONNECTION",
-            "NOT CONNECTED",
-            "Manual execution for now. Official Groww API access and testing are required before automated orders."
-        ))
-
-        page.addView(space(16))
-
-        page.addView(text(
-            "DEVELOPMENT BUILD • LIVE SIGNALS NOT CONNECTED",
-            11,
-            muted,
-            false
+        page.addView(gap(20))
+        page.addView(label(
+            "AI ANALYSIS • MANUAL APPROVAL • RISK CONTROL",
+            11, muted, true
         ))
 
         setContentView(scroll)
     }
 
-    private fun text(
+    private fun card() = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(18, 16, 18, 16)
+        setBackgroundColor(panel)
+    }
+
+    private fun label(
         value: String,
         size: Int,
         color: Int,
@@ -105,24 +119,11 @@ class MainActivity : Activity() {
         if (bold) {
             setTypeface(null, android.graphics.Typeface.BOLD)
         }
-        setPadding(0, 6, 0, 6)
+        setPadding(0, 7, 0, 7)
     }
 
-    private fun space(height: Int) = TextView(this).apply {
+    private fun gap(height: Int) = TextView(this).apply {
         this.height = height
     }
-
-    private fun card(
-        title: String,
-        body: String,
-        note: String
-    ) = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        setPadding(16, 14, 16, 14)
-        setBackgroundColor(panel)
-
-        addView(text(title, 16, mint, true))
-        addView(text(body, 17, Color.WHITE, true))
-        addView(text(note, 12, muted, false))
-    }
 }
+
