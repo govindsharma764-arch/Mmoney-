@@ -1,15 +1,13 @@
- 
+        
 package com.mmoney.app
 
 import android.app.Activity
 import android.os.Bundle
 import android.graphics.Color
 import android.widget.*
-import android.text.InputType
-import java.util.Locale
-import kotlin.math.floor
 
 class MainActivity : Activity() {
+
     private val bg = Color.rgb(10, 16, 30)
     private val panel = Color.rgb(22, 32, 52)
     private val mint = Color.rgb(86, 230, 176)
@@ -20,74 +18,111 @@ class MainActivity : Activity() {
 
         val page = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(20, 28, 20, 28)
+            setPadding(18, 26, 18, 26)
             setBackgroundColor(bg)
         }
 
-        val scroll = ScrollView(this)
-        scroll.addView(page)
+        val scroll = ScrollView(this).apply {
+            addView(page)
+        }
 
-        page.addView(text("MMONEY AI", 28, mint, true))
-        page.addView(text("TRADE WITH DISCIPLINE", 12, muted, false))
+        page.addView(text("MMONEY AI", 30, mint, true))
+        page.addView(text("AI TRADE ANALYSIS • OPTIONS", 13, muted, true))
         page.addView(space(18))
 
         page.addView(card(
-            "MULTI-INDEX SCANNER",
+            "MARKET WATCH",
             "NIFTY 50  •  BANK NIFTY  •  SENSEX",
-            "Waiting for verified live market data."
+            "Live index prices: NOT CONNECTED"
         ))
-
         page.addView(space(12))
 
         page.addView(card(
-            "AI SETUP STATUS",
+            "AI TRADE SIGNAL",
             "NO TRADE",
-            "Live prices and option-chain data are not connected yet."
+            "Verified live price and option-chain data required before CALL or PUT analysis."
+        ))
+        page.addView(space(12))
+
+        page.addView(card(
+            "TRADE PLAN",
+            "Direction: —\n" +
+            "Suggested strike: —\n" +
+            "Entry premium: —\n" +
+            "Stop-loss: —\n" +
+            "Target 1: —\n" +
+            "Target 2: —\n" +
+            "Target 3: —",
+            "Levels will appear only after a validated market setup."
+        ))
+        page.addView(space(12))
+
+        page.addView(card(
+            "MARKET CONFIRMATION",
+            "Price action: Waiting for data\n" +
+            "Option-chain OI: Waiting for data\n" +
+            "Volume: Waiting for data\n" +
+            "Volatility: Waiting for data\n" +
+            "Trend: Waiting for data",
+            "Analysis combines price action, technical indicators, OI, volume and volatility."
+        ))
+        page.addView(space(12))
+
+        page.addView(card(
+            "SETUP QUALITY",
+            "Not available",
+            "No confidence score without verified current market data. Signals are not guaranteed."
+        ))
+        page.addView(space(12))
+
+        page.addView(card(
+            "GROWW CONNECTION",
+            "NOT CONNECTED",
+            "Manual execution for now. Official Groww API access and testing are required before automated orders."
         ))
 
-        page.addView(space(12))
-        page.addView(text("POSITION SIZE CALCULATOR", 18, Color.WHITE, true))
+        page.addView(space(16))
 
-        val capital = field("Capital (₹)", "10000")
-        val entry = field("Option entry premium (₹)")
-        val stop = field("Stop-loss premium (₹)")
-        val lot = field("Lot size")
+        page.addView(text(
+            "DEVELOPMENT BUILD • LIVE SIGNALS NOT CONNECTED",
+            11,
+            muted,
+            false
+        ))
 
-        page.addView(capital)
-        page.addView(entry)
-        page.addView(stop)
-        page.addView(lot)
+        setContentView(scroll)
+    }
 
-        val result = text(
-            "Enter values to calculate quantity.",
-            14, muted, false
-        )
-        page.addView(result)
+    private fun text(
+        value: String,
+        size: Int,
+        color: Int,
+        bold: Boolean
+    ) = TextView(this).apply {
+        text = value
+        textSize = size.toFloat()
+        setTextColor(color)
+        if (bold) {
+            setTypeface(null, android.graphics.Typeface.BOLD)
+        }
+        setPadding(0, 6, 0, 6)
+    }
 
-        page.addView(Button(this).apply {
-            text = "CALCULATE POSITION SIZE"
-            setOnClickListener {
-                val c = capital.value().toDoubleOrNull()
-                val e = entry.value().toDoubleOrNull()
-                val s = stop.value().toDoubleOrNull()
-                val l = lot.value().toDoubleOrNull()
+    private fun space(height: Int) = TextView(this).apply {
+        this.height = height
+    }
 
-                if (c == null || e == null || s == null ||
-                    l == null || c <= 0 || e <= s || s <= 0 || l <= 0
-                ) {
-                    result.text = "Please enter valid values. Entry must be above SL."
-                } else {
-                    val riskBudget = c * 0.02
-                    val lots = floor(riskBudget / ((e - s) * l)).toInt()
-                    val quantity = lots * l
-                    val actualRisk = quantity * (e - s)
-                    val target = e + 3 * (e - s)
+    private fun card(
+        title: String,
+        body: String,
+        note: String
+    ) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(16, 14, 16, 14)
+        setBackgroundColor(panel)
 
-                    result.text = String.format(
-                        Locale.US,
-                        "Risk budget (2%%): ₹%.2f\nLots: %d\nQuantity: %.0f\nEstimated risk: ₹%.2f\n3R target premium: ₹%.2f",
-                        riskBudget, lots, quantity, actualRisk, target
-                    )
-
-                    if (lots == 0) {
-                       
+        addView(text(title, 16, mint, true))
+        addView(text(body, 17, Color.WHITE, true))
+        addView(text(note, 12, muted, false))
+    }
+}
