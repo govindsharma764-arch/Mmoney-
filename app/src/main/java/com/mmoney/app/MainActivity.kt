@@ -1,4 +1,4 @@
-
+ 
 package com.mmoney.app
 
 import android.app.Activity
@@ -90,77 +90,4 @@ class MainActivity : Activity() {
                     )
 
                     if (lots == 0) {
-                        result.append("\nRisk budget is insufficient for one lot.")
-                    }
-                }
-            }
-        })
-
-        page.addView(space(14))
-
-        page.addView(card(
-            "TRADING DISCIPLINE",
-            "• Decide SL before entry\n• Avoid revenge trading\n• Never widen SL to avoid a loss",
-            "Calculator uses an illustrative 2% risk setting."
-        ))
-
-        page.addView(space(12))
-
-        page.addView(card(
-            "GROWW CONNECTION",
-            "NOT CONNECTED",
-            "Official API access and verified market data are still required. Live orders are disabled."
-        ))
-
-        page.addView(space(16))
-        page.addView(text(
-            "DEVELOPMENT BUILD • NOT A LIVE SIGNAL SERVICE",
-            11, muted, false
-        ))
-
-        setContentView(scroll)
-    }
-
-    private fun text(
-        value: String,
-        size: Int,
-        color: Int,
-        bold: Boolean
-    ) = TextView(this).apply {
-        text = value
-        textSize = size.toFloat()
-        setTextColor(color)
-        if (bold) setTypeface(null, android.graphics.Typeface.BOLD)
-        setPadding(0, 6, 0, 6)
-    }
-
-    private fun space(height: Int) = TextView(this).apply {
-        this.height = height
-    }
-
-    private fun card(title: String, body: String, note: String) =
-        LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16, 14, 16, 14)
-            setBackgroundColor(panel)
-            addView(text(title, 16, mint, true))
-            addView(text(body, 15, Color.WHITE, true))
-            addView(text(note, 12, muted, false))
-        }
-
-    private fun field(label: String, initial: String = "") =
-        EditText(this).apply {
-            hint = label
-            setSingleLine(true)
-            inputType = InputType.TYPE_CLASS_NUMBER or
-                InputType.TYPE_NUMBER_FLAG_DECIMAL
-            setTextColor(Color.WHITE)
-            setHintTextColor(muted)
-            if (initial.isNotEmpty()) setText(initial)
-            setPadding(12, 8, 12, 8)
-            setBackgroundColor(panel)
-        }
-
-    private fun EditText.value() =
-        text?.toString()?.trim().orEmpty()
-}
+                       
