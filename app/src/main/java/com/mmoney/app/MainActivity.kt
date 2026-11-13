@@ -9,9 +9,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import java.util.Locale
+import android.widget.Toast
 
 class MainActivity : Activity() {
+
     private val bg = Color.rgb(10, 16, 30)
     private val panel = Color.rgb(22, 32, 52)
     private val mint = Color.rgb(86, 230, 176)
@@ -26,6 +27,7 @@ class MainActivity : Activity() {
     }
 
     private fun render() {
+
         val page = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(20, 28, 20, 28)
@@ -85,6 +87,26 @@ class MainActivity : Activity() {
             13, muted, false
         ))
         page.addView(broker)
+        page.addView(gap(12))
+
+        val orderCard = card()
+        orderCard.addView(label("ORDER EXECUTION", 14, mint, true))
+
+        val placeOrder = Button(this).apply {
+            text = "PLACE ORDER"
+            textSize = 17f
+            isEnabled = false
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.rgb(65, 75, 90))
+        }
+
+        orderCard.addView(placeOrder)
+        orderCard.addView(label(
+            "Waiting for Groww API connection and verified AI signal. Order requires your approval.",
+            12, muted, false
+        ))
+
+        page.addView(orderCard)
         page.addView(gap(14))
 
         page.addView(label(
