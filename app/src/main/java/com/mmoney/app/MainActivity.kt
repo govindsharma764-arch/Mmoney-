@@ -4,126 +4,92 @@ package com.mmoney.app
 import android.app.Activity
 import android.os.Bundle
 import android.graphics.Color
-import android.widget.*
+import android.view.Gravity
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import java.util.Locale
 
 class MainActivity : Activity() {
-
     private val bg = Color.rgb(10, 16, 30)
     private val panel = Color.rgb(22, 32, 52)
     private val mint = Color.rgb(86, 230, 176)
     private val muted = Color.rgb(170, 185, 205)
 
+    private val capitalAvailable = 20000.0
+    private val riskPercent = 3.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        render()
+    }
 
+    private fun render() {
         val page = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(20, 30, 20, 25)
+            setPadding(20, 28, 20, 28)
             setBackgroundColor(bg)
         }
 
         val scroll = ScrollView(this)
         scroll.addView(page)
 
-        page.addView(label("MMONEY AI", 32, mint, true))
-        page.addView(label(
-            "YOUR AI NIFTY TRADING ASSISTANT",
-            12, muted, true
-        ))
-        page.addView(gap(20))
+        page.addView(label("MMONEY AI", 30, mint, true))
+        page.addView(label("NIFTY 50 OPTIONS • AI ANALYSIS", 13, muted, true))
+        page.addView(gap(16))
+
+        val capital = card()
+        capital.addView(label("YOUR CAPITAL", 14, mint, true))
+        capital.addView(label("₹20,000", 28, Color.WHITE, true))
+        capital.addView(label("Risk per trade: 3% = ₹600", 15, muted, false))
+        capital.addView(label("No daily loss limit • Per-trade risk control", 12, muted, false))
+        page.addView(capital)
+        page.addView(gap(12))
 
         val signal = card()
-        signal.addView(label("AI TRADE SIGNAL", 14, mint, true))
-        signal.addView(label("NO TRADE", 30, Color.WHITE, true))
+        signal.addView(label("AI TRADE ANALYSIS", 14, mint, true))
+        signal.addView(label("NO TRADE", 25, Color.WHITE, true))
         signal.addView(label(
-            "Waiting for verified live market data...",
-            13, muted, false
+            "Waiting for verified live market data. CALL and PUT both will be scanned. Only the strongest confirmed setup will be shown.",
+            14, muted, false
         ))
         page.addView(signal)
-        page.addView(gap(14))
+        page.addView(gap(12))
 
-        val plan = card()
-        plan.addView(label("TRADE ANALYSIS", 14, mint, true))
-        plan.addView(label(
-            "Market: NIFTY 50 OPTIONS\n" +
-            "Direction: —\n" +
-            "Strike Price: —\n" +
-            "Entry Price: —\n" +
-            "Stop Loss: —\n" +
-            "Target Price: —",
-            16, Color.WHITE, true
-        ))
+        val sizing = card()
+        sizing.addView(label("AUTOMATIC POSITION SIZING", 14, mint, true))
+        sizing.addView(label("Entry price: Waiting for live data", 14, Color.WHITE, false))
+        sizing.addView(label("Stop loss: Waiting for live data", 14, Color.WHITE, false))
+        sizing.addView(label("Target: Dynamic 1:3 risk-reward", 14, Color.WHITE, false))
+        sizing.addView(label("Quantity and lot size: Automatic", 14, Color.WHITE, false))
+        sizing.addView(label("Capital usage: —", 14, Color.WHITE, true))
+        sizing.addView(label("Estimated risk: Maximum ₹600 per trade", 14, Color.WHITE, true))
+        page.addView(sizing)
+        page.addView(gap(12))
 
-        plan.addView(gap(10))
-        plan.addView(label("POSITION SIZE", 14, mint, true))
-        plan.addView(label(
-            "Capital: ₹20,000\n" +
-"Risk Per Trade: 3% (₹6,00)\n" +
-            "Quantity: —\n" +
-            "Lots: —\n" +
-            "Estimated Loss: —\n" +
-            "Potential Profit (1:3): —",
-            16, Color.WHITE, true
-        ))
-        plan.addView(label(
-            "Quantity will be calculated using live entry, stop-loss and current exchange lot size.",
-            12, muted, false
-        ))
-        page.addView(plan)
-        page.addView(gap(14))
-
-        val profit = card()
-        profit.addView(label("SMART PROFIT BOOKING", 14, mint, true))
-        profit.addView(label(
-            "Target 1: Partial profit booking\n" +
-            "Remaining Quantity: Hold\n" +
-            "Trailing Stop Loss: Active after setup\n" +
-            "Target 2: Next profit level\n" +
-            "Target 3: Final target",
-            15, Color.WHITE, true
-        ))
-        profit.addView(label(
-            "Trailing SL and partial exits require verified live prices and broker order support.",
-            12, muted, false
-        ))
-        page.addView(profit)
-        page.addView(gap(14))
-
-        val approval = card()
-        approval.addView(label("YOUR APPROVAL", 14, mint, true))
-        approval.addView(label(
-            "Real order sirf tumhare YES ke baad place hoga.",
-            13, muted, false
-        ))
-
-        val yes = Button(this).apply {
-            text = "YES - PLACE ORDER"
-            isEnabled = false
-        }
-
-        val no = Button(this).apply {
-            text = "NO - SKIP TRADE"
-            isEnabled = false
-        }
-
-        approval.addView(yes)
-        approval.addView(no)
-        page.addView(approval)
-        page.addView(gap(14))
+        val exits = card()
+        exits.addView(label("SMART PROFIT MANAGEMENT", 14, mint, true))
+        exits.addView(label("TP1: Partial profit booking", 14, Color.WHITE, false))
+        exits.addView(label("Remaining quantity: Trailing stop-loss", 14, Color.WHITE, false))
+        exits.addView(label("TP2 / TP3: Further targets", 14, Color.WHITE, false))
+        exits.addView(label("Automatic exit requires verified broker API integration.", 12, muted, false))
+        page.addView(exits)
+        page.addView(gap(12))
 
         val broker = card()
-        broker.addView(label("GROWW BROKER", 14, mint, true))
+        broker.addView(label("GROWW CONNECTION", 14, mint, true))
         broker.addView(label("NOT CONNECTED", 20, Color.WHITE, true))
         broker.addView(label(
-            "Live API connection required for market data and orders.",
-            12, muted, false
+            "Official Groww API integration is pending. Never share API secrets in chat.",
+            13, muted, false
         ))
         page.addView(broker)
+        page.addView(gap(14))
 
-        page.addView(gap(18))
         page.addView(label(
-            "AI ANALYSIS • MANUAL APPROVAL • 5% RISK",
-            11, muted, true
+            "Safety: Options trading involves risk. Signals are not guaranteed. No trade will be recommended without verified market data.",
+            12, muted, false
         ))
 
         setContentView(scroll)
@@ -131,7 +97,7 @@ class MainActivity : Activity() {
 
     private fun card() = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        setPadding(18, 16, 18, 16)
+        setPadding(17, 15, 17, 15)
         setBackgroundColor(panel)
     }
 
@@ -144,14 +110,11 @@ class MainActivity : Activity() {
         text = value
         textSize = size.toFloat()
         setTextColor(color)
-        if (bold) {
-            setTypeface(null, android.graphics.Typeface.BOLD)
-        }
-        setPadding(0, 6, 0, 6)
+        if (bold) setTypeface(null, android.graphics.Typeface.BOLD)
+        setPadding(0, 5, 0, 5)
     }
 
     private fun gap(height: Int) = TextView(this).apply {
         this.height = height
     }
 }
-
