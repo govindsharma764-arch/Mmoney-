@@ -1,4 +1,3 @@
-
 package com.mmoney.app
 
 import android.app.Activity
