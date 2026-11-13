@@ -58,7 +58,7 @@ class MainActivity : Activity() {
         plan.addView(label("POSITION SIZE", 14, mint, true))
         plan.addView(label(
             "Capital: ₹20,000\n" +
-"Risk Per Trade: 5% (₹6,00)\n" +
+"Risk Per Trade: 3% (₹6,00)\n" +
             "Quantity: —\n" +
             "Lots: —\n" +
             "Estimated Loss: —\n" +
